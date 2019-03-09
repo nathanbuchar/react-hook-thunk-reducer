@@ -1,0 +1,43 @@
+language: node_js
+node_js:
+  - "node"
+before_script:
+  - npm run build
+deploy:
+  - provider: npm
+    skip_cleanup: true
+    email: $NPM_EMAIL_ADDRESS
+    api_key: $NPM_API_KEY
+    tag: latest
+    on:
+      tags: true
+      condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
+  - provider: npm
+    skip_cleanup: true
+    email: $NPM_EMAIL_ADDRESS
+    api_key: $NPM_API_KEY
+    tag: next
+    on:
+      tags: true
+      condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta)\.[0-9]+$
+  - provider: releases
+    skip_cleanup: true
+    api_key: $GITHUB_OAUTH_TOKEN
+    file_glob: true
+    file: dist/*
+    tag_name: $TRAVIS_TAG
+    target_commitish: $TRAVIS_COMMIT
+    on:
+      tags: true
+      condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$
+  - provider: releases
+    skip_cleanup: true
+    api_key: $GITHUB_OAUTH_TOKEN
+    file_glob: true
+    file: dist/*
+    tag_name: $TRAVIS_TAG
+    target_commitish: $TRAVIS_COMMIT
+    prerelease: true
+    on:
+      tags: true
+      condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta)\.[0-9]+$
