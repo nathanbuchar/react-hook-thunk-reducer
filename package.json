@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "webpack",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "release": "standard-version",
     "release:beta": "standard-version --prerelease beta",
     "test": "jest"
