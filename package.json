@@ -22,7 +22,7 @@
     "redux"
   ],
   "scripts": {
-    "build": "webpack",
+    "build": "rm -rf dist && webpack",
     "prepare": "npm run build",
     "release": "standard-version",
     "release:beta": "standard-version --prerelease beta",
@@ -48,6 +48,7 @@
     "react-dom": "^16.8.0"
   },
   "files": [
+    "AUTHORS",
     "dist/*"
   ]
 }
