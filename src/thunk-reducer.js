@@ -13,6 +13,7 @@ function useThunkReducer(reducer, initialArg, init = (a) => a) {
   const [state, setHookState] = useState(init(initialArg));
 
   const stateRef = useRef(state);
+
   const getState = useCallback(() => stateRef.current);
   const setState = useCallback((newState) => {
     stateRef.current = newState;
@@ -20,13 +21,13 @@ function useThunkReducer(reducer, initialArg, init = (a) => a) {
   });
 
   const reduce = useCallback((action) => reducer(getState(), action));
-  const thunkDispatch = useCallback((action) => (
+  const dispatch = useCallback((action) => (
     typeof action === 'function'
-      ? action(thunkDispatch, getState)
+      ? action(dispatch, getState)
       : setState(reduce(action))
   ));
 
-  return [state, thunkDispatch];
+  return [state, dispatch];
 }
 
 export default useThunkReducer;
