@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import { renderHook, cleanup, act } from 'react-hooks-testing-library';
+import { act, cleanup, renderHook } from 'react-hooks-testing-library';
 
 import useThunkReducer from './thunk-reducer';
 
