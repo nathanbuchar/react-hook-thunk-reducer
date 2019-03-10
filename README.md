@@ -89,7 +89,7 @@ The value of the inner function will be returned when dispatching thunks.
 
 ```js
 function incrementAndReturnCount() {
-  return (dispatch, getState => {
+  return (dispatch, getState) => {
     dispatch(increment());
 
     return getState().count;
