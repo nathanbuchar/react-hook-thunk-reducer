@@ -10,20 +10,20 @@ import { useCallback, useRef, useState } from 'react';
  * @returns {Array}
  */
 function useThunkReducer(reducer, initialArg, init = (a) => a) {
-  const [state, setState] = useState(init(initialArg));
+  const [state, setHookState] = useState(init(initialArg));
 
   const stateRef = useRef(state);
   const getState = useCallback(() => stateRef.current);
-  const setCurrentState = useCallback((newState) => {
+  const setState = useCallback((newState) => {
     stateRef.current = newState;
-    setState(newState);
+    setHookState(newState);
   });
 
   const reduce = useCallback((action) => reducer(getState(), action));
   const thunkDispatch = useCallback((action) => (
     typeof action === 'function'
       ? action(thunkDispatch, getState)
-      : setCurrentState(reduce(action))
+      : setState(reduce(action))
   ));
 
   return [state, thunkDispatch];
