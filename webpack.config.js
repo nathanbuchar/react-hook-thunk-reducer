@@ -17,7 +17,4 @@ module.exports = {
       },
     ],
   },
-  externals: [
-    'react',
-  ],
 };
