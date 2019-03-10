@@ -26,7 +26,7 @@ function useThunkReducer(reducer, initialArg, init = (a) => a) {
       : setCurrentState(reduce(action))
   ));
 
-  return [getState(), thunkDispatch];
+  return [state, thunkDispatch];
 }
 
 export default useThunkReducer;
