@@ -4,29 +4,29 @@ import { renderHook, cleanup, act } from 'react-hooks-testing-library';
 
 import useThunkReducer from './thunk-reducer';
 
-function init(initialCount) {
-  return {
-    count: initialCount,
-  };
-}
-
-function reducer(state, { type }) {
-  switch (type) {
-    case 'increment':
-      return { count: state.count + 1 };
-    default:
-      throw new Error();
-  }
-}
-
-function increment() {
-  return {
-    type: 'increment',
-  };
-}
-
 describe('thunk reducer hook tests', () => {
   afterEach(cleanup);
+
+  function init(initialCount) {
+    return {
+      count: initialCount,
+    };
+  }
+
+  function reducer(state, { type }) {
+    switch (type) {
+      case 'increment':
+        return { count: state.count + 1 };
+      default:
+        throw new Error();
+    }
+  }
+
+  function increment() {
+    return {
+      type: 'increment',
+    };
+  }
 
   test('returns state and dispatcher', () => {
     const { result } = renderHook(() => useThunkReducer(reducer, { count: 0 }));
@@ -51,8 +51,46 @@ describe('thunk reducer hook tests', () => {
     expect(result.current[0].count).toEqual(1);
   });
 
-  test('dispatches a thunk', (done) => {
-    function incrementAsync() {
+  test('dispatches a thunk', () => {
+    function incrementThunk() {
+      return (dispatch, getState) => {
+        expect(getState().count).toEqual(0);
+        act(() => dispatch(increment()));
+        expect(getState().count).toEqual(1);
+      };
+    }
+
+    const { result } = renderHook(() => useThunkReducer(reducer, 0, init));
+    const [, dispatch] = result.current;
+
+    expect(result.current[0].count).toEqual(0);
+    act(() => dispatch(incrementThunk()));
+    expect(result.current[0].count).toEqual(1);
+  });
+
+  test('dispatches nested thunks', () => {
+    function incrementThunkInner() {
+      return (dispatch) => {
+        act(() => dispatch(increment()));
+      };
+    }
+
+    function incrementThunk() {
+      return (dispatch) => {
+        act(() => dispatch(incrementThunkInner()));
+      };
+    }
+
+    const { result } = renderHook(() => useThunkReducer(reducer, 0, init));
+    const [, dispatch] = result.current;
+
+    expect(result.current[0].count).toEqual(0);
+    act(() => dispatch(incrementThunk()));
+    expect(result.current[0].count).toEqual(1);
+  });
+
+  test('dispatches an asynchronous thunk', (done) => {
+    function incrementThunkAsync() {
       return (dispatch, getState) => {
         expect(getState().count).toEqual(0);
 
@@ -68,34 +106,18 @@ describe('thunk reducer hook tests', () => {
     const { result } = renderHook(() => useThunkReducer(reducer, 0, init));
     const [, dispatch] = result.current;
 
-    act(() => dispatch(incrementAsync()));
+    expect(result.current[0].count).toEqual(0);
+    act(() => dispatch(incrementThunkAsync()));
     act(() => dispatch(increment()));
-  });
-
-  test('dispatches nested thunks', () => {
-    function incrementAsyncInner() {
-      return (dispatch) => {
-        act(() => dispatch(increment()));
-      };
-    }
-
-    function incrementAsyncOuter() {
-      return (dispatch) => {
-        act(() => dispatch(incrementAsyncInner()));
-      };
-    }
-
-    const { result } = renderHook(() => useThunkReducer(reducer, 0, init));
-    const [, dispatch] = result.current;
-
-    act(() => dispatch(incrementAsyncOuter()));
     expect(result.current[0].count).toEqual(1);
   });
 
-  test('dispatch returns value of inner function', () => {
+  test('dispatch returns value of thunk', () => {
     function incrementAndReturnCount() {
       return (dispatch, getState) => {
+        expect(getState().count).toEqual(0);
         act(() => dispatch(increment()));
+        expect(getState().count).toEqual(1);
         return getState().count;
       };
     }
