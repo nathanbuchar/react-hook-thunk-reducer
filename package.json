@@ -3,6 +3,7 @@
   "version": "0.0.3",
   "description": "Extends React's useReducer() hook so that the dispatcher supports thunks.",
   "main": "./dist/thunk-reducer.js",
+  "types": "./types/thunk-reducer.d.ts",
   "license": "MIT",
   "author": {
     "name": "Nathan Buchar",
@@ -47,6 +48,7 @@
   },
   "files": [
     "AUTHORS",
-    "dist/*"
+    "dist/*",
+    "types/*"
   ]
 }
