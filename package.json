@@ -28,7 +28,7 @@
     "release:beta": "standard-version --prerelease beta",
     "test": "jest"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^16.8.4"
   },
   "devDependencies": {
