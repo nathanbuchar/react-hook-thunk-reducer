@@ -2,7 +2,7 @@
 
 import { act, cleanup, renderHook } from 'react-hooks-testing-library';
 
-import useThunkReducer from './thunk-reducer';
+import useThunkReducer from '..';
 
 describe('thunk reducer hook tests', () => {
   afterEach(cleanup);

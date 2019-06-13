@@ -7,6 +7,10 @@ module.exports = {
   output: {
     path: path.resolve('dist'),
     filename: 'thunk-reducer.js',
+    library: 'react-hook-thunk-reducer',
+    libraryTarget: 'umd',
+    publicPath: '/dist/',
+    umdNamedDefine: true,
   },
   module: {
     rules: [
@@ -16,5 +20,25 @@ module.exports = {
         use: 'babel-loader',
       },
     ],
+  },
+  resolve: {
+    alias: {
+      react: path.join(__dirname, './node_modules/react'),
+      'react-dom': path.join(__dirname, './node_modules/react-dom'),
+    },
+  },
+  externals: {
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'React',
+      root: 'React',
+    },
+    'react-dom': {
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'ReactDOM',
+      root: 'ReactDOM',
+    },
   },
 };
