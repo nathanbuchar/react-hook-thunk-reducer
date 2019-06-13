@@ -23,13 +23,14 @@ import useThunkReducer from 'react-hook-thunk-reducer';
 
 function Component({ initialState }) {
   const [state, dispatch] = useThunkReducer(reducer, initialState);
+
   // ...
 }
 ```
 
 ## Usage
 
-Create your actions just like you would in Redux. Just like [redux-thunk](https://www.npmjs.com/package/redux-thunk), if an action returns a function, it's treated as a [thunk](https://en.wikipedia.org/wiki/Thunk) and has access to the current state.
+Create your actions just like you would in Redux. Similar to [redux-thunk](https://www.npmjs.com/package/redux-thunk), if an action returns a function, it's treated as a [thunk](https://en.wikipedia.org/wiki/Thunk) and has access to the current state.
 
 ```js
 function increment() {
@@ -68,6 +69,8 @@ function reducer(state, action) {
 function Counter({ initialState }) {
   const [state, dispatch] = useThunkReducer(reducer, initialState);
 
+  // ...
+
   return (
     <>
       Count: {state.count}
@@ -80,9 +83,9 @@ function Counter({ initialState }) {
 Dispatch your actions using the augmented `dispatch` function.
 
 ```js
-const onButtonPress = useCallback(() => {
+const onButtonPress = () => {
   dispatch(incrementIfOdd());
-});
+};
 ```
 
 The value of the inner function will be returned when dispatching thunks.
@@ -93,7 +96,7 @@ function incrementAndReturnCount() {
     dispatch(increment());
 
     return getState().count;
-  }
+  };
 }
 
 const newCount = dispatch(incrementAndReturnCount());
