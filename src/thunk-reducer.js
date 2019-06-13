@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 /**
  * @callback Thunk
@@ -25,19 +25,21 @@ import { useCallback, useRef, useState } from 'react';
 function useThunkReducer(reducer, initialArg, init = (a) => a) {
   const [hookState, setHookState] = useState(init(initialArg));
 
+  // State management.
   const state = useRef(hookState);
-  const getState = useCallback(() => state.current);
-  const setState = useCallback((newState) => {
+  const getState = () => state.current;
+  const setState = (newState) => {
     state.current = newState;
     setHookState(newState);
-  });
+  };
 
-  const reduce = useCallback((action) => reducer(getState(), action));
-  const dispatch = useCallback((action) => (
+  // Reducer and augmented dispatcher.
+  const reduce = (action) => reducer(getState(), action);
+  const dispatch = (action) => (
     typeof action === 'function'
       ? action(dispatch, getState)
       : setState(reduce(action))
-  ));
+  );
 
   return [hookState, dispatch];
 }
