@@ -1,32 +1,33 @@
 /* eslint-env jest */
 
-import { act, cleanup, renderHook } from 'react-hooks-testing-library';
+import { act, renderHook } from 'react-hooks-testing-library';
+import { cleanup } from '@testing-library/react';
 
 import useThunkReducer from '..';
 
+function init(initialCount) {
+  return {
+    count: initialCount,
+  };
+}
+
+function reducer(state, { type }) {
+  switch (type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function increment() {
+  return {
+    type: 'increment',
+  };
+}
+
 describe('thunk reducer hook tests', () => {
   afterEach(cleanup);
-
-  function init(initialCount) {
-    return {
-      count: initialCount,
-    };
-  }
-
-  function reducer(state, { type }) {
-    switch (type) {
-      case 'increment':
-        return { count: state.count + 1 };
-      default:
-        throw new Error();
-    }
-  }
-
-  function increment() {
-    return {
-      type: 'increment',
-    };
-  }
 
   test('returns state and dispatcher', () => {
     const { result } = renderHook(() => useThunkReducer(reducer, { count: 0 }));
@@ -54,14 +55,14 @@ describe('thunk reducer hook tests', () => {
   test('dispatches a thunk', () => {
     function incrementThunk() {
       return (dispatch, getState) => {
-        const prevState = getState();
-        expect(prevState.count).toEqual(0);
+        const stateA = getState();
+        expect(stateA.count).toEqual(0);
 
         act(() => dispatch(increment()));
 
-        const newState = getState();
-        expect(prevState.count).toEqual(0);
-        expect(newState.count).toEqual(1);
+        const stateB = getState();
+        expect(stateA.count).toEqual(0);
+        expect(stateB.count).toEqual(1);
       };
     }
 
@@ -97,12 +98,20 @@ describe('thunk reducer hook tests', () => {
   test('dispatches an asynchronous thunk', (done) => {
     function incrementThunkAsync() {
       return (dispatch, getState) => {
-        expect(getState().count).toEqual(0);
+        const stateA = getState();
+        expect(stateA.count).toEqual(0);
 
         setTimeout(() => {
-          expect(getState().count).toEqual(1);
+          const stateB = getState();
+          expect(stateA.count).toEqual(0);
+          expect(stateB.count).toEqual(1);
+
           act(() => dispatch(increment()));
-          expect(getState().count).toEqual(2);
+
+          const stateC = getState();
+          expect(stateA.count).toEqual(0);
+          expect(stateB.count).toEqual(1);
+          expect(stateC.count).toEqual(2);
           done();
         }, 100);
       };
