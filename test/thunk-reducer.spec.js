@@ -54,9 +54,14 @@ describe('thunk reducer hook tests', () => {
   test('dispatches a thunk', () => {
     function incrementThunk() {
       return (dispatch, getState) => {
-        expect(getState().count).toEqual(0);
+        const prevState = getState();
+        expect(prevState.count).toEqual(0);
+
         act(() => dispatch(increment()));
-        expect(getState().count).toEqual(1);
+
+        const newState = getState();
+        expect(prevState.count).toEqual(0);
+        expect(newState.count).toEqual(1);
       };
     }
 
