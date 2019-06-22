@@ -4,4 +4,4 @@ export interface Thunk<S, A> {
   (dispatch: Dispatch<A | Thunk<S, A>>, getState: () => S): void
 }
 
-export function useThunkReducer<S, A>(reducer: Reducer<S, A>, initialArg: S, init?: (s: S) => S): [S, Dispatch<A | Thunk<S, A>>]
+export default function useThunkReducer<S, A>(reducer: Reducer<S, A>, initialArg: S, init?: (s: S) => S): [S, Dispatch<A | Thunk<S, A>>]
