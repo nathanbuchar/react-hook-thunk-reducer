@@ -1,14 +1,14 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 /**
- * @callback Thunk
+ * @function Thunk
  * @param {Dispatch} dispatch
  * @param {Function} getState
  * @returns {void|*}
  */
 
 /**
- * @callback Dispatch
+ * @function Dispatch
  * @param {Object|Thunk} action
  * @returns {void|*}
  */
@@ -27,19 +27,23 @@ function useThunkReducer(reducer, initialArg, init = (a) => a) {
 
   // State management.
   const state = useRef(hookState);
-  const getState = () => state.current;
-  const setState = (newState) => {
+  const getState = useCallback(() => state.current, []);
+  const setState = useCallback((newState) => {
     state.current = newState;
     setHookState(newState);
-  };
+  }, []);
 
-  // Reducer and augmented dispatcher.
-  const reduce = (action) => reducer(getState(), action);
-  const dispatch = (action) => (
-    typeof action === 'function'
+  // Reducer.
+  const reduce = useCallback((action) => {
+    return reducer(getState(), action);
+  }, []);
+
+  // Augmented dispatcher.
+  const dispatch = useCallback((action) => {
+    return typeof action === 'function'
       ? action(dispatch, getState)
-      : setState(reduce(action))
-  );
+      : setState(reduce(action));
+  }, []);
 
   return [hookState, dispatch];
 }
