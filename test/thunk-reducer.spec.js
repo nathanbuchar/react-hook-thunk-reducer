@@ -143,4 +143,64 @@ describe('thunk reducer hook tests', () => {
       expect(dispatch(incrementAndReturnCount())).toEqual(1);
     });
   });
+
+  test('hook result does not change if its inputs are changed', () => {
+    const renderHookResult = renderHook(() => useThunkReducer(reducer, { count: 0 }));
+
+    // Capture the state and dispatch after first render
+    const [state, dispatch] = renderHookResult.result.current;
+
+    // Ensure that the hook state is updated, then rerender the hook
+    renderHookResult
+      .waitForNextUpdate()
+      .then(() => {
+        renderHookResult.rerender();
+      })
+      .then(() => {
+        // Capture the new state and dispatch returned after the hook is
+        // rerendered. This should not change if the hook props are not changed
+        const [newState, newDispatch] = renderHookResult.result.current;
+
+        expect(newState).toBe(state);
+        expect(newDispatch).toBe(dispatch);
+      });
+  });
+
+  test('hook result changes if inputs change', () => {
+    function newReducer(state, { type }) {
+      switch (type) {
+        case 'decrement':
+          return { count: state.count - 1 };
+        default:
+          throw new Error();
+      }
+    }
+
+    const renderHookResult = renderHook(({ reducerProp }) => {
+      return useThunkReducer(reducerProp, { count: 0 });
+    }, {
+      initialProps: {
+        reducerProp: reducer,
+      },
+    });
+
+    // Capture the state and dispatch after first render
+    const [state, dispatch] = renderHookResult.result.current;
+
+    // Ensure that the hook state is updated, then rerender the hook
+    renderHookResult
+      .waitForNextUpdate()
+      .then(() => {
+        renderHookResult.rerender({ reducerProp: newReducer });
+      })
+      .then(() => {
+        // Capture the new state and dispatch returned after the hook is
+        // rerendered. Because the hook reducer is changed, the returned
+        // dispatch function must also be changed
+        const [newState, newDispatch] = renderHookResult.result.current;
+
+        expect(newState).toBe(state);
+        expect(newDispatch).not.toBe(dispatch);
+      });
+  });
 });

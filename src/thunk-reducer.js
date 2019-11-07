@@ -27,23 +27,23 @@ function useThunkReducer(reducer, initialArg, init = (a) => a) {
 
   // State management.
   const state = useRef(hookState);
-  const getState = useCallback(() => state.current, []);
+  const getState = useCallback(() => state.current, [state]);
   const setState = useCallback((newState) => {
     state.current = newState;
     setHookState(newState);
-  }, []);
+  }, [state, setHookState]);
 
   // Reducer.
   const reduce = useCallback((action) => {
     return reducer(getState(), action);
-  }, []);
+  }, [reducer, getState]);
 
   // Augmented dispatcher.
   const dispatch = useCallback((action) => {
     return typeof action === 'function'
       ? action(dispatch, getState)
       : setState(reduce(action));
-  }, []);
+  }, [getState, setState, reduce]);
 
   return [hookState, dispatch];
 }
