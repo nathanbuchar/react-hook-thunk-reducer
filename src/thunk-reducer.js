@@ -45,7 +45,7 @@ function useThunkReducer(reducer, initialArg, init = (a) => a) {
       : setState(reduce(action));
   }, [getState, setState, reduce]);
 
-  return [hookState, dispatch];
+  return [hookState, dispatch, getState];
 }
 
 export default useThunkReducer;

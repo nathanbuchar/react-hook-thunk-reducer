@@ -29,12 +29,13 @@ function increment() {
 describe('thunk reducer hook tests', () => {
   afterEach(cleanup);
 
-  test('returns state and dispatcher', () => {
+  test('returns state and dispatcher and getState', () => {
     const { result } = renderHook(() => useThunkReducer(reducer, { count: 0 }));
 
-    expect(result.current).toHaveLength(2);
+    expect(result.current).toHaveLength(3);
     expect(result.current[0]).toEqual({ count: 0 });
     expect(result.current[1]).toBeInstanceOf(Function);
+    expect(result.current[2]).toBeInstanceOf(Function);
   });
 
   test('initializes state lazily', () => {
@@ -121,9 +122,11 @@ describe('thunk reducer hook tests', () => {
     const [, dispatch] = result.current;
 
     expect(result.current[0].count).toEqual(0);
+    expect(result.current[2]().count).toEqual(0);
     act(() => dispatch(incrementThunkAsync()));
     act(() => dispatch(increment()));
     expect(result.current[0].count).toEqual(1);
+    expect(result.current[2]().count).toEqual(1);
   });
 
   test('dispatch returns value of thunk', () => {
