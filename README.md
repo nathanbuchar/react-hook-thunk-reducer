@@ -19,7 +19,7 @@ npm install react-hook-thunk-reducer
 Then just import it and use it like you would `React.useReducer()`.
 
 ```js
-import useThunkReducer from 'react-hook-thunk-reducer';
+import { useThunkReducer } from 'react-hook-thunk-reducer';
 
 function Component({ initialState }) {
   const [state, dispatch] = useThunkReducer(reducer, initialState);
@@ -53,7 +53,7 @@ function incrementIfOdd() {
 Create your functional component and call the `useThunkReducer()` hook as if it were `React.useReducer()`;
 
 ```js
-import useThunkReducer from 'react-hook-thunk-reducer';
+import { useThunkReducer } from 'react-hook-thunk-reducer';
 
 // ...
 
