@@ -3,7 +3,7 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { cleanup } from '@testing-library/react';
 
-import useThunkReducer from '..';
+import { useThunkReducer } from './thunk-reducer';
 
 function init(initialCount) {
   return {
