@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/nathanbuchar/react-hook-thunk-reducer/compare/v0.2.1...v0.2.2) (2020-01-26)
+
+
+### Features
+
+* Add named export ([2ab0a6f](https://github.com/nathanbuchar/react-hook-thunk-reducer/commit/2ab0a6fdcca47b69697c3d237eb2b1ac280a20b8))
+
 ### [0.2.1](https://github.com/nathanbuchar/react-hook-thunk-reducer/compare/v0.2.0...v0.2.1) (2019-11-07)
 
 
