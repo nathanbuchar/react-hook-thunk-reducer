@@ -1,6 +1,6 @@
 {
   "name": "react-hook-thunk-reducer",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Extends React's useReducer() hook so that the dispatcher supports thunks.",
   "main": "./dist/thunk-reducer.js",
   "types": "./types/thunk-reducer.d.ts",
