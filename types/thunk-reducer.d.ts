@@ -1,7 +1,16 @@
-import { Dispatch, Reducer, useRef, useState } from 'react'
+import { Reducer } from 'react';
 
-export interface Thunk<S, A> {
-  (dispatch: Dispatch<A | Thunk<S, A>>, getState: () => S): void
+export interface ThunkDispatch<S, A> {
+  <
+    Action extends (dispatch: ThunkDispatch<S, A>, getState: () => S) => unknown
+  >(
+    action: Action
+  ): ReturnType<Action>;
+  (value: A): void;
 }
 
-export default function useThunkReducer<S, A>(reducer: Reducer<S, A>, initialArg: S, init?: (s: S) => S): [S, Dispatch<A | Thunk<S, A>>]
+export default function useThunkReducer<S, A>(
+  reducer: Reducer<S, A>,
+  initialArg: S,
+  init?: (s: S) => S
+): [S, ThunkDispatch<S, A>];
