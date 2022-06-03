@@ -23,7 +23,7 @@ import { useCallback, useRef, useState } from 'react';
  * @returns {[*, Dispatch]}
  */
 export function useThunkReducer(reducer, initialArg, init = (a) => a) {
-  const [hookState, setHookState] = useState(init(initialArg));
+  const [hookState, setHookState] = useState(() => init(initialArg));
 
   // State management.
   const state = useRef(hookState);
