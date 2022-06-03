@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/nathanbuchar/react-hook-thunk-reducer/compare/v0.2.4...v0.3.0) (2022-06-03)
+
+
+### Bug Fixes
+
+* Do not re-run init function every time state changes ([bec30ca](https://github.com/nathanbuchar/react-hook-thunk-reducer/commit/bec30ca697506332da3917001435e0d60083610f)), closes [#22](https://github.com/nathanbuchar/react-hook-thunk-reducer/issues/22)
+* return type of dispatch to inherit from thunk action return type ([9e1522a](https://github.com/nathanbuchar/react-hook-thunk-reducer/commit/9e1522ab40c3a65223553c605b56f63802b59e11))
+
 ### [0.2.4](https://github.com/nathanbuchar/react-hook-thunk-reducer/compare/v0.2.3...v0.2.4) (2020-01-26)
 
 ### [0.2.3](https://github.com/nathanbuchar/react-hook-thunk-reducer/compare/v0.2.2...v0.2.3) (2020-01-26)
